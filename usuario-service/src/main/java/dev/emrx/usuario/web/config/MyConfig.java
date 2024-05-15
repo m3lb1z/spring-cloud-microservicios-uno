@@ -1,4 +1,4 @@
-package dev.emrx.usuario.config;
+package dev.emrx.usuario.web.config;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
