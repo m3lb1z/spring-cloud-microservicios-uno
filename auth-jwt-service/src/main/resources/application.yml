@@ -1,0 +1,24 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: AUTH-SERVICE
+  config:
+    import: optional:configserver:http://localhost:8085
+  datasource:
+    url: jdbc:h2:mem:microservicios
+    driver-class-name: org.h2.Driver
+
+
+jwt:
+  secret: ${JWT_SECRET:secret}
+
+admin-paths:
+  paths:
+    -
+      uri: "/usuarios"
+      method: "POST"
+#    -
+#      uri: "/usuarios"
+#      method: "GET"

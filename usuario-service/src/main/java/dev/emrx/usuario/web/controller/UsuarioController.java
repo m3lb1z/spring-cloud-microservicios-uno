@@ -4,6 +4,7 @@ import dev.emrx.usuario.model.entity.Usuario;
 import dev.emrx.usuario.model.service.UsuarioService;
 import feign.Response;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,14 @@ public class UsuarioController {
         return ResponseEntity.created(url).body(usuario);
     }
 
+    int cantidadReintentos = 1;
+
     @GetMapping("/{idUsuario}")
-    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
+//    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
+    @Retry(name = "ratingHotelRetry", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable String idUsuario) {
+        log.info("Listar un solo usuario: UsuarioController");
+        log.info("Cantidad de reintentos: {}", cantidadReintentos++);
         Usuario usuario = usuarioService.getUsuario(idUsuario);
 
         return ResponseEntity.ok(usuario);

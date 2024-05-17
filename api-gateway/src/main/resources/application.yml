@@ -1,25 +1,35 @@
 server:
   port: 8084
 
+
 spring:
+
+#  main:
+#    web-application-type: reactive
   application:
     name: API-GATEWAY
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: USUARIO-SERVICE
-            uri: lb://USUARIO-SERVICE
-            predicates:
-              - Path=/usuarios/**
-          - id: HOTEL-SERVICE
-            uri: lb://HOTEL-SERVICE
-            predicates:
-              - Path=/hoteles/**,/staffs/**
-          - id: CALIFICACION-SERVICE
-            uri: lb://CALIFICACION-SERVICE
-            predicates:
-              - Path=/calificaciones/**
+      routes:
+        - id: USUARIO-SERVICE
+          uri: lb://USUARIO-SERVICE
+          predicates:
+            - Path=/usuarios/**
+          filters:
+            - AuthFilter
+        - id: HOTEL-SERVICE
+          uri: lb://HOTEL-SERVICE
+          predicates:
+            - Path=/hoteles/**,/staffs/**
+        - id: CALIFICACION-SERVICE
+          uri: lb://CALIFICACION-SERVICE
+          predicates:
+            - Path=/calificaciones/**
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+#      mvc:
 
 eureka:
   instance:
